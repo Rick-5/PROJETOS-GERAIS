@@ -1,0 +1,37 @@
+name: quiz
+description: "A new Flutter project."
+publish_to: 'none' 
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.6.2
+
+dependencies:
+  flutter:
+    sdk: flutter
+  google_fonts: ^6.1.0  
+  cupertino_icons: ^1.0.8
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+flutter:
+  uses-material-design: true
+
+
+  assets:
+    - assets/images/quiz.jpg 
+    - assets/images/espaco.jpg 
+    - assets/images/choco.jpg 
+    - assets/images/italia.jpg 
+    - assets/images/roma.jpg 
+    - assets/images/lua.jpg 
+    - assets/images/food.jpg 
+    - assets/images/music.jpg 
+    - assets/images/mapa.jpg 
+    - assets/images/saturn.jpg 
+    - assets/images/quimica.jpg
+    - assets/images/final.jpg 
