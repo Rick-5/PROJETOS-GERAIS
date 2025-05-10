@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart';
-import '../globals.dart';
-
-// Adicione as variáveis globais ou de outra parte do código onde estão definidas
-
-ValueNotifier<List<Transacao>> historicoTransacoes = ValueNotifier([]);
+import '../globals.dart'; // Usa saldoUsuario e historicoTransacoes globais
+import '../models/transacaopage.dart'; // Classe Transacao importada corretamente
 
 class TransferPage extends StatefulWidget {
   @override
@@ -16,40 +12,41 @@ class _TransferPageState extends State<TransferPage> {
   final TextEditingController _valorController = TextEditingController();
 
   void _realizarTransferencia() {
-  final conta = _contaController.text;
-  final valorTexto = _valorController.text;
-  final valor = double.tryParse(valorTexto);
+    final conta = _contaController.text;
+    final valorTexto = _valorController.text;
+    final valor = double.tryParse(valorTexto);
 
-  if (conta.isNotEmpty && valor != null) {
-    if (saldoUsuario.value >= valor) {
-      saldoUsuario.value -= valor;
+    if (conta.isNotEmpty && valor != null) {
+      if (saldoUsuario.value >= valor) {
+        saldoUsuario.value -= valor;
 
-      // Atualizando o histórico de transações
-      historicoTransacoes.value = [
-        ...historicoTransacoes.value,
-        Transacao(
-          descricao: 'Transferência para conta $conta',
-          valor: valor,
-          data: DateTime.now(),
-          entrada: false,
-        ),
-      ];
+        // Atualizando o histórico de transações
+        historicoTransacoes.value = [
+          ...historicoTransacoes.value,
+          Transacao(
+            descricao: 'Transferência para conta $conta',
+            valor: valor,
+            data: DateTime.now(),
+            entrada: false,
+          ),
+        ];
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Transferido R\$ ${valor.toStringAsFixed(2)} para conta $conta')),
-      );
-      Navigator.pop(context);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Transferido R\$ ${valor.toStringAsFixed(2)} para conta $conta')),
+        );
+
+        Navigator.pop(context);
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Saldo insuficiente!')),
+        );
+      }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Saldo insuficiente!')),
+        SnackBar(content: Text('Preencha os campos corretamente!')),
       );
     }
-  } else {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Preencha os campos corretamente!')),
-    );
   }
-}
 
   @override
   Widget build(BuildContext context) {
@@ -72,10 +69,7 @@ class _TransferPageState extends State<TransferPage> {
               controller: _valorController,
               keyboardType: TextInputType.number,
               decoration: InputDecoration(labelText: 'Valor (R\$)'),
-
-              onSubmitted: (_) {
-                _realizarTransferencia();
-              }
+              onSubmitted: (_) => _realizarTransferencia(),
             ),
             SizedBox(height: 20),
             ElevatedButton(
@@ -87,19 +81,4 @@ class _TransferPageState extends State<TransferPage> {
       ),
     );
   }
-}
-
-// Classe de Transação (precisa estar definida em algum lugar do seu código)
-class Transacao {
-  final String descricao;
-  final double valor;
-  final DateTime data;
-  final bool entrada;
-
-  Transacao({
-    required this.descricao,
-    required this.valor,
-    required this.data,
-    required this.entrada,
-  });
 }

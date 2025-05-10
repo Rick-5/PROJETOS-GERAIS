@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'screens/loginpage.dart';
 import 'package:flutter/foundation.dart';
 import 'globals.dart';
+import 'screens/saldo.dart'; // Importar a tela de saldo
 
 void main() {
   runApp(MyApp());
@@ -85,6 +86,11 @@ class MyApp extends StatelessWidget {
             ),
           ),
           home: LoginPage(),
+          routes: {
+            '/login': (context) => LoginPage(),
+            '/saldo': (context) => SaldoPage(),  // Adiciona a rota da tela de saldo
+            // Adicione outras rotas conforme necessário, como '/transferencia', etc.
+          },
         );
       },
     );

@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
-import 'account_infopage.dart'; // Importa a tela de dados da conta
-import 'transferpage.dart'; // Importa a tela de transferência
-import 'historicpage.dart'; // Importa a tela de histórico
+import 'account_infopage.dart';
+import 'transferpage.dart';
+import 'historicpage.dart';
+import 'simulador.dart';
+import 'deposito.dart';
+import 'boletopage.dart';
 import '../globals.dart';
+import 'saldo.dart'; // Adicionada a importação da SaldoPage
 
 class WelcomePage extends StatelessWidget {
   final List<Map<String, dynamic>> opcoes = [
@@ -10,7 +14,10 @@ class WelcomePage extends StatelessWidget {
     {'icon': Icons.person, 'title': 'Dados da Conta'},
     {'icon': Icons.send, 'title': 'Transferir'},
     {'icon': Icons.receipt_long, 'title': 'Pagamentos'},
-    {'icon': Icons.history, 'title': 'Histórico de Transações'}, // Alteração aqui
+    {'icon': Icons.history, 'title': 'Histórico de Transações'},
+    {'icon': Icons.show_chart, 'title': 'Simular Investimento'},
+    {'icon': Icons.picture_as_pdf, 'title': 'Gerar Boleto'},
+    {'icon': Icons.attach_money, 'title': 'Depósito'},
   ];
 
   @override
@@ -68,15 +75,16 @@ class WelcomePage extends StatelessWidget {
                 itemCount: opcoes.length,
                 itemBuilder: (context, index) {
                   return Card(
-                    elevation: 0, // Remove o sombreado
+                    elevation: 0,
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                    // Corrigir aqui: usar Border.all()
                     clipBehavior: Clip.antiAlias,
                     child: InkWell(
                       onTap: () {
                         if (index == 0) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text('Seu saldo atual é: R\$ ${saldoUsuario.value.toStringAsFixed(2)}')),
+                          // Navegar para a tela de saldo
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => SaldoPage()),
                           );
                         } else if (index == 1) {
                           Navigator.push(
@@ -94,6 +102,21 @@ class WelcomePage extends StatelessWidget {
                           Navigator.push(
                             context,
                             MaterialPageRoute(builder: (context) => HistoricoPage()),
+                          );
+                        } else if (index == 5) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => SimuladorPage()),
+                          );
+                        } else if (index == 6) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => BoletoPage()),
+                          );
+                        } else if (index == 7) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => DepositoPage()),
                           );
                         }
                       },
