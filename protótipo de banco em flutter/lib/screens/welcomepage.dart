@@ -6,11 +6,11 @@ import 'simulador.dart';
 import 'deposito.dart';
 import 'boletopage.dart';
 import '../globals.dart';
-import 'saldo.dart'; // Adicionada a importação da SaldoPage
 
 class WelcomePage extends StatelessWidget {
+  final double saldo = 5234.78; // Simulação de valor de saldo
+
   final List<Map<String, dynamic>> opcoes = [
-    {'icon': Icons.account_balance_wallet, 'title': 'Ver Saldo'},
     {'icon': Icons.person, 'title': 'Dados da Conta'},
     {'icon': Icons.send, 'title': 'Transferir'},
     {'icon': Icons.receipt_long, 'title': 'Pagamentos'},
@@ -19,6 +19,34 @@ class WelcomePage extends StatelessWidget {
     {'icon': Icons.picture_as_pdf, 'title': 'Gerar Boleto'},
     {'icon': Icons.attach_money, 'title': 'Depósito'},
   ];
+
+  void _handleOptionTap(BuildContext context, int index) {
+    switch (index) {
+      case 0:
+        Navigator.push(context, MaterialPageRoute(builder: (_) => AccountInfoPage()));
+        break;
+      case 1:
+        Navigator.push(context, MaterialPageRoute(builder: (_) => TransferPage()));
+        break;
+      case 2:
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Você não tem contas a pagar :)')),
+        );
+        break;
+      case 3:
+        Navigator.push(context, MaterialPageRoute(builder: (_) => HistoricoPage()));
+        break;
+      case 4:
+        Navigator.push(context, MaterialPageRoute(builder: (_) => SimuladorPage()));
+        break;
+      case 5:
+        Navigator.push(context, MaterialPageRoute(builder: (_) => BoletoPage()));
+        break;
+      case 6:
+        Navigator.push(context, MaterialPageRoute(builder: (_) => DepositoPage()));
+        break;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,27 +59,32 @@ class WelcomePage extends StatelessWidget {
         padding: const EdgeInsets.all(20.0),
         child: Column(
           children: [
-            Center(
-              child: Column(
-                children: [
-                  Icon(Icons.account_circle, size: 80, color: Colors.yellow[700]),
-                  SizedBox(height: 10),
-                  Text(
-                    'Bem-vindo ao Banco Virtual!',
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.yellow[800],
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(height: 20),
+            // Saldo + botão de tema
             Row(
-              mainAxisAlignment: MainAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
+                // Saldo destacado
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Saldo disponível',
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: Colors.grey[700],
+                      ),
+                    ),
+                    SizedBox(height: 6),
+                    Text(
+                      'R\$ ${saldo.toStringAsFixed(2)}',
+                      style: TextStyle(
+                        fontSize: 36,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.green[700],
+                      ),
+                    ),
+                  ],
+                ),
                 IconButton(
                   icon: Icon(Icons.brightness_6),
                   onPressed: () {
@@ -63,7 +96,10 @@ class WelcomePage extends StatelessWidget {
                 ),
               ],
             ),
-            SizedBox(height: 10),
+
+            SizedBox(height: 30),
+
+            // Grade de opções
             Expanded(
               child: GridView.builder(
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -75,59 +111,24 @@ class WelcomePage extends StatelessWidget {
                 itemCount: opcoes.length,
                 itemBuilder: (context, index) {
                   return Card(
-                    elevation: 0,
+                    elevation: 1,
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                     clipBehavior: Clip.antiAlias,
                     child: InkWell(
-                      onTap: () {
-                        if (index == 0) {
-                          // Navegar para a tela de saldo
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => SaldoPage()),
-                          );
-                        } else if (index == 1) {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => AccountInfoPage()),
-                          );
-                        } else if (index == 2) {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => TransferPage()),
-                          );
-                        } else if (index == 3) {
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Você não tem contas a pagar :)')));
-                        } else if (index == 4) {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => HistoricoPage()),
-                          );
-                        } else if (index == 5) {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => SimuladorPage()),
-                          );
-                        } else if (index == 6) {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => BoletoPage()),
-                          );
-                        } else if (index == 7) {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => DepositoPage()),
-                          );
-                        }
-                      },
+                      onTap: () => _handleOptionTap(context, index),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Icon(opcoes[index]['icon'], color: Colors.yellow[700]),
+                          SizedBox(height: 8),
                           Text(
                             opcoes[index]['title'],
-                            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.yellow[800]),
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 12,
+                              color: Colors.yellow[800],
+                            ),
+                            textAlign: TextAlign.center,
                           ),
                         ],
                       ),

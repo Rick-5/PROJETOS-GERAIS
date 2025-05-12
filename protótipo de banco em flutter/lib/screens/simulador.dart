@@ -11,13 +11,12 @@ class _SimuladorPageState extends State<SimuladorPage> {
   final TextEditingController _prazoController = TextEditingController();
 
   String _tipoInvestimento = 'Poupança';
-  String _resultado = '';
+  String? _resultado;
 
-  // Taxas fictícias mensais para o simulador
   final Map<String, double> _taxas = {
-    'Poupança': 0.005,         // 0.5% ao mês
-    'CDB': 0.011,              // 1.1% ao mês
-    'Tesouro Direto': 0.009,   // 0.9% ao mês
+    'Poupança': 0.005,
+    'CDB': 0.011,
+    'Tesouro Direto': 0.009,
   };
 
   void _simularInvestimento() {
@@ -26,7 +25,7 @@ class _SimuladorPageState extends State<SimuladorPage> {
 
     if (valor == null || meses == null || valor <= 0 || meses <= 0) {
       setState(() {
-        _resultado = 'Por favor, insira valores válidos.';
+        _resultado = '⚠️ Por favor, insira valores válidos.';
       });
       return;
     }
@@ -36,12 +35,14 @@ class _SimuladorPageState extends State<SimuladorPage> {
     final double rendimento = montante - valor;
 
     setState(() {
-      _resultado =
-          'Valor investido: R\$ ${valor.toStringAsFixed(2)}\n'
-          'Tipo: $_tipoInvestimento\n'
-          'Prazo: $meses meses\n\n'
-          'Retorno estimado: R\$ ${montante.toStringAsFixed(2)}\n'
-          'Rendimento: R\$ ${rendimento.toStringAsFixed(2)}';
+      _resultado = '''
+💰 Valor investido: R\$ ${valor.toStringAsFixed(2)}
+📈 Tipo: $_tipoInvestimento
+🗓 Prazo: $meses meses
+
+📊 Retorno estimado: R\$ ${montante.toStringAsFixed(2)}
+📈 Rendimento: R\$ ${rendimento.toStringAsFixed(2)}
+''';
     });
   }
 
@@ -53,27 +54,41 @@ class _SimuladorPageState extends State<SimuladorPage> {
         centerTitle: true,
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20.0),
+        padding: const EdgeInsets.all(20),
         child: Column(
           children: [
+            Text(
+              'Preencha os dados abaixo para simular seu investimento.',
+              style: TextStyle(fontSize: 16, color: Colors.grey[700]),
+              textAlign: TextAlign.center,
+            ),
+            SizedBox(height: 25),
+
+            // Valor
             TextField(
               controller: _valorController,
               keyboardType: TextInputType.numberWithOptions(decimal: true),
               decoration: InputDecoration(
                 labelText: 'Valor a investir (R\$)',
+                prefixIcon: Icon(Icons.attach_money),
                 border: OutlineInputBorder(),
               ),
             ),
             SizedBox(height: 20),
+
+            // Prazo
             TextField(
               controller: _prazoController,
               keyboardType: TextInputType.number,
               decoration: InputDecoration(
                 labelText: 'Prazo (em meses)',
+                prefixIcon: Icon(Icons.calendar_today),
                 border: OutlineInputBorder(),
               ),
             ),
             SizedBox(height: 20),
+
+            // Tipo de investimento
             DropdownButtonFormField<String>(
               value: _tipoInvestimento,
               items: _taxas.keys.map((tipo) {
@@ -89,20 +104,44 @@ class _SimuladorPageState extends State<SimuladorPage> {
               },
               decoration: InputDecoration(
                 labelText: 'Tipo de Investimento',
+                prefixIcon: Icon(Icons.trending_up),
                 border: OutlineInputBorder(),
               ),
             ),
             SizedBox(height: 30),
-            ElevatedButton(
-              onPressed: _simularInvestimento,
-              child: Text('Simular'),
+
+            // Botão
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton.icon(
+                onPressed: _simularInvestimento,
+                icon: Icon(Icons.play_arrow),
+                label: Text('Simular'),
+                style: ElevatedButton.styleFrom(
+                  padding: EdgeInsets.symmetric(vertical: 14),
+                  textStyle: TextStyle(fontSize: 16),
+                ),
+              ),
             ),
             SizedBox(height: 30),
-            Text(
-              _resultado,
-              style: TextStyle(fontSize: 16),
-              textAlign: TextAlign.left,
-            ),
+
+            // Resultado
+            if (_resultado != null)
+              Card(
+                elevation: 4,
+                margin: EdgeInsets.only(top: 10),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                color: Colors.green[50],
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Text(
+                    _resultado!,
+                    style: TextStyle(fontSize: 16, color: Colors.green[900]),
+                  ),
+                ),
+              ),
           ],
         ),
       ),

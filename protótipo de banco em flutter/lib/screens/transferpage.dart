@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../globals.dart'; // Usa saldoUsuario e historicoTransacoes globais
-import '../models/transacaopage.dart'; // Classe Transacao importada corretamente
+import '../globals.dart'; // saldoUsuario e historicoTransacoes
+import '../models/transacaopage.dart';
 
 class TransferPage extends StatefulWidget {
   @override
@@ -12,40 +12,42 @@ class _TransferPageState extends State<TransferPage> {
   final TextEditingController _valorController = TextEditingController();
 
   void _realizarTransferencia() {
-    final conta = _contaController.text;
-    final valorTexto = _valorController.text;
-    final valor = double.tryParse(valorTexto);
+    final conta = _contaController.text.trim();
+    final valor = double.tryParse(_valorController.text.replaceAll(',', '.'));
 
-    if (conta.isNotEmpty && valor != null) {
-      if (saldoUsuario.value >= valor) {
-        saldoUsuario.value -= valor;
-
-        // Atualizando o histórico de transações
-        historicoTransacoes.value = [
-          ...historicoTransacoes.value,
-          Transacao(
-            descricao: 'Transferência para conta $conta',
-            valor: valor,
-            data: DateTime.now(),
-            entrada: false,
-          ),
-        ];
-
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Transferido R\$ ${valor.toStringAsFixed(2)} para conta $conta')),
-        );
-
-        Navigator.pop(context);
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Saldo insuficiente!')),
-        );
-      }
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Preencha os campos corretamente!')),
-      );
+    if (conta.isEmpty || valor == null || valor <= 0) {
+      _mostrarMensagem('⚠️ Preencha os campos corretamente.');
+      return;
     }
+
+    if (saldoUsuario.value < valor) {
+      _mostrarMensagem('❌ Saldo insuficiente!');
+      return;
+    }
+
+    // Atualiza saldo e histórico
+    saldoUsuario.value -= valor;
+    historicoTransacoes.value = [
+      ...historicoTransacoes.value,
+      Transacao(
+        descricao: 'Transferência para conta $conta',
+        valor: valor,
+        data: DateTime.now(),
+        entrada: false,
+      ),
+    ];
+
+    _mostrarMensagem('✅ R\$ ${valor.toStringAsFixed(2)} transferidos para conta $conta!');
+    Navigator.pop(context);
+  }
+
+  void _mostrarMensagem(String texto) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(texto),
+        behavior: SnackBarBehavior.floating,
+      ),
+    );
   }
 
   @override
@@ -56,25 +58,50 @@ class _TransferPageState extends State<TransferPage> {
         centerTitle: true,
       ),
       body: Padding(
-        padding: const EdgeInsets.all(20.0),
+        padding: const EdgeInsets.all(20),
         child: Column(
           children: [
+            Text(
+              'Preencha os dados da conta de destino e o valor da transferência.',
+              style: TextStyle(fontSize: 16, color: Colors.grey[700]),
+              textAlign: TextAlign.center,
+            ),
+            SizedBox(height: 30),
+
             TextField(
               controller: _contaController,
               keyboardType: TextInputType.number,
-              decoration: InputDecoration(labelText: 'Conta destino'),
+              decoration: InputDecoration(
+                labelText: 'Conta destino',
+                prefixIcon: Icon(Icons.account_balance),
+                border: OutlineInputBorder(),
+              ),
             ),
             SizedBox(height: 20),
+
             TextField(
               controller: _valorController,
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(labelText: 'Valor (R\$)'),
+              keyboardType: TextInputType.numberWithOptions(decimal: true),
+              decoration: InputDecoration(
+                labelText: 'Valor (R\$)',
+                prefixIcon: Icon(Icons.attach_money),
+                border: OutlineInputBorder(),
+              ),
               onSubmitted: (_) => _realizarTransferencia(),
             ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _realizarTransferencia,
-              child: Text('Confirmar Transferência'),
+            SizedBox(height: 30),
+
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton.icon(
+                onPressed: _realizarTransferencia,
+                icon: Icon(Icons.send),
+                label: Text('Confirmar Transferência'),
+                style: ElevatedButton.styleFrom(
+                  padding: EdgeInsets.symmetric(vertical: 14),
+                  textStyle: TextStyle(fontSize: 16),
+                ),
+              ),
             ),
           ],
         ),

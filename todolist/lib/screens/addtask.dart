@@ -13,12 +13,15 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
   final _descriptionController = TextEditingController();
 
   void _addTask() {
+    if (_titleController.text.trim().isEmpty) return;
+
     final task = Task(
       id: DateTime.now().toString(),
       title: _titleController.text,
       description: _descriptionController.text,
       createdAt: DateTime.now(),
     );
+
     Provider.of<TaskProvider>(context, listen: false).addTask(task);
     Navigator.pop(context);
   }
@@ -27,7 +30,8 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Adicionar Tarefa'),
+        title: const Text('Nova Tarefa'),
+        backgroundColor: Colors.indigo,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -35,16 +39,32 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
           children: [
             TextField(
               controller: _titleController,
-              decoration: InputDecoration(labelText: 'Título'),
+              decoration: InputDecoration(
+                labelText: 'Título',
+                border: OutlineInputBorder(),
+              ),
             ),
+            SizedBox(height: 12),
             TextField(
               controller: _descriptionController,
-              decoration: InputDecoration(labelText: 'Descrição'),
+              maxLines: 3,
+              decoration: InputDecoration(
+                labelText: 'Descrição (opcional)',
+                border: OutlineInputBorder(),
+              ),
             ),
             SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _addTask,
-              child: Text('Adicionar Tarefa'),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton.icon(
+                onPressed: _addTask,
+                icon: Icon(Icons.save),
+                label: Text('Salvar'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.indigo,
+                  padding: EdgeInsets.symmetric(vertical: 14),
+                ),
+              ),
             ),
           ],
         ),
