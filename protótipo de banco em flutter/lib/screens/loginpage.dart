@@ -7,20 +7,18 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final TextEditingController _usuarioController = TextEditingController();
   final TextEditingController _senhaController = TextEditingController();
 
   void _login() {
-    String usuario = _usuarioController.text;
     String senha = _senhaController.text;
 
-    if (usuario == 'usuario' && senha == '12345') {
+    if (senha == '12345') { // Senha para passar o login
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => WelcomePage()),
       );
     } else {
-      _mostrarErro('Usuário ou senha inválidos');
+      _mostrarErro('Senha inválida');
     }
   }
 
@@ -47,36 +45,36 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'Banco Virtual',
-          style: TextStyle(color: Colors.yellow[700]),
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(50), // Ajusta a altura do AppBar
+        child: AppBar(
+          title: Text(
+            'Banco Virtual',
+            style: TextStyle(color: Colors.yellow[700]),
+          ),
+          centerTitle: true,
         ),
-        centerTitle: true,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            TextField(
-            controller: _usuarioController,
-            decoration: InputDecoration(
-              labelText: 'Usuário',
-              labelStyle: TextStyle(color: Colors.yellow),
-              enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.yellow, width: 1),
+            // Saudação à esquerda
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                'Olá, usuário!',
+                style: TextStyle(
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.yellow[700],
+                ),
               ),
-              focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.yellow, width: 1),
-              ),
-              contentPadding: EdgeInsets.symmetric(vertical: 14, horizontal: 12),
             ),
-            onEditingComplete: () {
-              FocusScope.of(context).nextFocus(); // Para alternar para o próximo campo ao pressionar Enter
-            },
-          ),
-            SizedBox(height: 16),
+            SizedBox(height: 20), // Espaço reduzido entre a saudação e o campo de senha
+
+            // Campo de senha
             TextField(
               controller: _senhaController,
               obscureText: true,
@@ -88,16 +86,24 @@ class _LoginPageState extends State<LoginPage> {
                 enabledBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: Colors.yellow[700]!, width: 1),
                 ),
-                contentPadding: EdgeInsets.symmetric(vertical: 14, horizontal: 12),
+                contentPadding: EdgeInsets.symmetric(vertical: 12, horizontal: 12), // Menor altura
               ),
               onSubmitted: (_) => _login(),
             ),
-            SizedBox(height: 20),
+            SizedBox(height: 16), // Espaçamento entre o campo de senha e o botão
+
+            // Botão de login
             ElevatedButton(
               onPressed: _login,
-              child: Text('Entrar'),
+              child: Text(
+                'Entrar',
+                style: TextStyle(fontSize: 18), // Aumenta o tamanho da fonte
+              ),
               style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                minimumSize: Size(double.infinity, 30), // Mais compacto (altura 50)
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
                 elevation: 0, // Remove o contorno
               ),
             ),
