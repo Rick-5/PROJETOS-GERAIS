@@ -25,8 +25,10 @@ class _TransferPageState extends State<TransferPage> {
       return;
     }
 
-    // Atualiza saldo e histórico
+    // Atualiza o saldo
     saldoUsuario.value -= valor;
+
+    // Adiciona a transferência ao histórico
     historicoTransacoes.value = [
       ...historicoTransacoes.value,
       Transacao(

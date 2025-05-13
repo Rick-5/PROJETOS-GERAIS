@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../globals.dart';
+import '../globals.dart'; // saldoUsuario e historicoTransacoes
 import '../models/transacaopage.dart';
 
 class DepositoPage extends StatefulWidget {
@@ -15,8 +15,10 @@ class _DepositoPageState extends State<DepositoPage> {
     final valor = double.tryParse(valorTexto);
 
     if (valor != null && valor > 0) {
+      // Atualiza saldo com o valor do depósito
       saldoUsuario.value += valor;
 
+      // Atualiza histórico de transações
       historicoTransacoes.value = [
         ...historicoTransacoes.value,
         Transacao(
@@ -31,7 +33,7 @@ class _DepositoPageState extends State<DepositoPage> {
         SnackBar(content: Text('Depósito de R\$ ${valor.toStringAsFixed(2)} realizado com sucesso!')),
       );
 
-      Navigator.pop(context);
+      Navigator.pop(context); // Volta para a tela anterior
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Insira um valor válido!')),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ela_me_olha_e_ve_um_bancuuuu/screens/cartoes.dart';
 import 'account_infopage.dart';
 import 'transferpage.dart';
 import 'historicpage.dart';
@@ -8,8 +9,6 @@ import 'boletopage.dart';
 import '../globals.dart';
 
 class WelcomePage extends StatelessWidget {
-  final double saldo = 5234.78; // Simulação de valor de saldo
-
   final List<Map<String, dynamic>> opcoes = [
     {'icon': Icons.person, 'title': 'Dados da Conta'},
     {'icon': Icons.send, 'title': 'Transferir'},
@@ -18,6 +17,7 @@ class WelcomePage extends StatelessWidget {
     {'icon': Icons.show_chart, 'title': 'Simular Investimento'},
     {'icon': Icons.picture_as_pdf, 'title': 'Gerar Boleto'},
     {'icon': Icons.attach_money, 'title': 'Depósito'},
+    {'icon': Icons.credit_card, 'title': 'Meus Cartões'},
   ];
 
   void _handleOptionTap(BuildContext context, int index) {
@@ -44,6 +44,9 @@ class WelcomePage extends StatelessWidget {
         break;
       case 6:
         Navigator.push(context, MaterialPageRoute(builder: (_) => DepositoPage()));
+        break;
+      case 7:
+        Navigator.push(context, MaterialPageRoute(builder: (_) => CartoesPage()));
         break;
     }
   }
@@ -75,13 +78,19 @@ class WelcomePage extends StatelessWidget {
                       ),
                     ),
                     SizedBox(height: 6),
-                    Text(
-                      'R\$ ${saldo.toStringAsFixed(2)}',
-                      style: TextStyle(
-                        fontSize: 36,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.green[700],
-                      ),
+                    // Usando ValueListenableBuilder para atualizar o saldo dinamicamente
+                    ValueListenableBuilder<double>(
+                      valueListenable: saldoUsuario,
+                      builder: (context, saldo, child) {
+                        return Text(
+                          'R\$ ${saldo.toStringAsFixed(2)}',
+                          style: TextStyle(
+                            fontSize: 36,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.green[700],
+                          ),
+                        );
+                      },
                     ),
                   ],
                 ),
@@ -96,7 +105,6 @@ class WelcomePage extends StatelessWidget {
                 ),
               ],
             ),
-
             SizedBox(height: 30),
 
             // Grade de opções
