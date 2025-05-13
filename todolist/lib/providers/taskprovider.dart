@@ -11,6 +11,16 @@ class TaskProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void updateTask(String id, String title, String description, DateTime? dueDate) {
+    final index = _tasks.indexWhere((task) => task.id == id);
+    if (index != -1) {
+      _tasks[index].title = title;
+      _tasks[index].description = description;
+      _tasks[index].dueDate = dueDate;
+      notifyListeners();
+    }
+  }
+
   void toggleTaskStatus(String id) {
     final task = _tasks.firstWhere((task) => task.id == id);
     task.isDone = !task.isDone;

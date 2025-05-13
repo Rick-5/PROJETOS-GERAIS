@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 import '../models/task.dart';
 import '../providers/taskprovider.dart';
+import '../screens/addtask.dart';
 
 class TaskItem extends StatefulWidget {
   final Task task;
@@ -28,8 +30,27 @@ class _TaskItemState extends State<TaskItem> {
         ? '${task.description.substring(0, 60)}...'
         : task.description;
 
+    final dueDateFormatted = task.dueDate != null
+        ? DateFormat('dd/MM/yyyy').format(task.dueDate!)
+        : null;
+
+    final isOverdue = task.dueDate != null &&
+        task.dueDate!.isBefore(DateTime.now()) &&
+        !task.isDone;
+
     return GestureDetector(
-      onTap: _toggleDescription,
+      onTap: () {
+        Provider.of<TaskProvider>(context, listen: false)
+            .toggleTaskStatus(task.id);
+      },
+      onDoubleTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => AddTaskScreen(existingTask: task),
+          ),
+        );
+      },
       onLongPress: () {
         Provider.of<TaskProvider>(context, listen: false)
             .removeTask(task.id);
@@ -37,12 +58,15 @@ class _TaskItemState extends State<TaskItem> {
       child: Container(
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: task.isDone ? Colors.green[100] : Colors.blue[50],
+          color: task.isDone
+              ? Colors.green[100]
+              : isOverdue
+                  ? Colors.red[100]
+                  : Colors.blue[50],
           borderRadius: BorderRadius.circular(12),
           border: Border.all(color: Colors.indigo.withOpacity(0.3)),
         ),
         child: Column(
-          mainAxisSize: MainAxisSize.min, // ← faz o container se ajustar
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
@@ -50,17 +74,26 @@ class _TaskItemState extends State<TaskItem> {
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
-                decoration:
-                    task.isDone ? TextDecoration.lineThrough : null,
+                decoration: task.isDone ? TextDecoration.lineThrough : null,
               ),
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
             ),
+            if (dueDateFormatted != null) ...[
+              SizedBox(height: 4),
+              Text(
+                'Prazo: $dueDateFormatted',
+                style: TextStyle(fontSize: 12, color: Colors.grey[700]),
+              ),
+            ],
             if (task.description.isNotEmpty) ...[
               SizedBox(height: 8),
-              Text(
-                _showFullDescription ? task.description : truncated,
-                style: TextStyle(fontSize: 14),
+              GestureDetector(
+                onTap: _toggleDescription,
+                child: Text(
+                  _showFullDescription ? task.description : truncated,
+                  style: TextStyle(fontSize: 14),
+                ),
               ),
             ],
             SizedBox(height: 8),

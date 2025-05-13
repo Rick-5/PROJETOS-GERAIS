@@ -1,8 +1,9 @@
 class Task {
   final String id;
-  final String title;
-  final String description;
+  String title;  
+  String description;
   final DateTime createdAt;
+  DateTime? dueDate;
   bool isDone;
 
   Task({
@@ -10,6 +11,7 @@ class Task {
     required this.title,
     required this.description,
     required this.createdAt,
+    this.dueDate,
     this.isDone = false,
   });
 }
