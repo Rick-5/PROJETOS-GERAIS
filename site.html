@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meu Site Incrível</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Resetando margens e padding */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Fontes, fundo e cores */
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f0f0f0;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            0% { opacity: 0; transform: translateY(30px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes scaleIn {
+            0% { opacity: 0; transform: scale(0.95); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        /* Menu de navegação */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background-color: #2C3E50;
+            padding: 20px 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            z-index: 100;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 12px 25px;
+            margin: 0 15px;
+            font-size: 18px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        nav a:hover {
+            background-color: #1abc9c;
+            border-radius: 4px;
+            transition: 0.3s;
+        }
+
+        /* Cabeçalho */
+        header {
+            background: linear-gradient(45deg, #FF6F61, #FF5722);
+            color: white;
+            text-align: center;
+            padding: 120px 20px;
+            margin-top: 60px;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        header h1 {
+            font-size: 4em;
+            letter-spacing: 2px;
+            font-family: 'Poppins', sans-serif;
+            margin-bottom: 20px;
+        }
+
+        header p {
+            font-size: 1.5em;
+            font-weight: 300;
+            animation: fadeIn 1s ease-in-out 0.5s;
+        }
+
+        /* Seções principais */
+        main {
+            padding: 60px 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        /* Cada seção */
+        section {
+            flex: 1;
+            margin: 15px;
+            padding: 25px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease-in-out;
+            animation: scaleIn 1.2s ease-in-out;
+        }
+
+        section:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        section h2 {
+            font-size: 2.5em;
+            color: #2C3E50;
+            margin-bottom: 15px;
+        }
+
+        section p {
+            font-size: 1.1em;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin-top: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        img:hover {
+            transform: scale(1.05);
+        }
+
+        /* Depoimentos */
+        .testimonials {
+            background-color: #f9f9f9;
+            padding: 60px 20px;
+            animation: fadeIn 1s ease-in-out 1.5s;
+        }
+
+        .testimonial-item {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin: 10px;
+            text-align: center;
+            flex: 1;
+            animation: scaleIn 1.5s ease-in-out;
+        }
+
+        .testimonial-item p {
+            font-size: 1.1em;
+            margin-bottom: 15px;
+        }
+
+        .testimonial-item h3 {
+            font-size: 1.3em;
+            font-weight: 600;
+        }
+
+        /* Chamada à Ação (CTA) */
+        .cta {
+            background: linear-gradient(45deg, #FF5722, #FF6F61);
+            color: white;
+            text-align: center;
+            padding: 60px 20px;
+            margin-top: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 1s ease-in-out 2s;
+        }
+
+        .cta h2 {
+            font-size: 2.5em;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .cta a {
+            font-size: 1.2em;
+            color: white;
+            background-color: #2C3E50;
+            padding: 15px 30px;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .cta a:hover {
+            background-color: #1abc9c;
+        }
+
+        /* Rodapé */
+        footer {
+            background-color: #2C3E50;
+            color: white;
+            text-align: center;
+            padding: 30px 20px;
+            margin-top: 60px;
+            font-size: 1.1em;
+        }
+
+        footer a {
+            color: #1abc9c;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Formulário de Contato */
+        .form-container {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            margin: 0 auto;
+            animation: scaleIn 1.5s ease-in-out;
+        }
+
+        .form-container input,
+        .form-container textarea {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1em;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-container input:focus,
+        .form-container textarea:focus {
+            border-color: #FF6F61;
+        }
+
+        .form-container button {
+            width: 100%;
+            padding: 12px;
+            background-color: #FF5722;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .form-container button:hover {
+            background-color: #FF6F61;
+        }
+
+        /* Estilos responsivos */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+
+            section {
+                margin-bottom: 20px;
+            }
+
+            .testimonials {
+                padding: 40px 20px;
+            }
+
+            .testimonial-item {
+                flex-basis: 100%;
+            }
+
+            .cta a {
+                padding: 12px 25px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Menu de Navegação -->
+    <nav>
+        <a href="#home">Início</a>
+        <a href="#sobre">Sobre</a>
+        <a href="#servicos">Serviços</a>
+        <a href="#depoimentos">Depoimentos</a>
+        <a href="#contato">Contato</a>
+    </nav>
+
+    <!-- Cabeçalho -->
+    <header id="home">
+        <h1>Transforme Suas Ideias em Realidade Digital</h1>
+        <p>Criação de sites inovadores para destacar seu negócio na internet.</p>
+    </header>
+
+    <!-- Conteúdo Principal -->
+    <main>
+        <div class="container">
+            <!-- Seção Sobre -->
+            <section id="sobre">
+                <h2>Sobre Mim</h2>
+                <p>Sou um desenvolvedor full-stack com experiência em diversos projetos de alto impacto. Minha missão é trazer soluções criativas e eficazes para os desafios digitais do seu negócio.</p>
+                <img src="https://via.placeholder.com/600x400" alt="Imagem sobre mim">
+            </section>
+
+            <!-- Seção Serviços -->
+            <section id="servicos">
+                <h2>Meus Serviços</h2>
+                <ul>
+                    <li><i class="fas fa-code"></i> Desenvolvimento Web Responsivo</li>
+                    <li><i class="fas fa-search"></i> SEO e Otimização de Sites</li>
+                    <li><i class="fas fa-cart-plus"></i> Criação de E-commerce</li>
+                    <li><i class="fas fa-users"></i> Design de Experiência do Usuário</li>
+                </ul>
+            </section>
+        </div>
+
+        <!-- Depoimentos -->
+        <section id="depoimentos" class="testimonials">
+            <h2>O que nossos clientes dizem</h2>
+            <div class="container" style="display: flex; flex-wrap: wrap; justify-content: space-between;">
+                <div class="testimonial-item">
+                    <p>"Trabalho excepcional! O site é funcional e bonito, excedeu minhas expectativas!"</p>
+                    <h3>João Silva</h3>
+                </div>
+                <div class="testimonial-item">
+                    <p>"A experiência foi incrível. Comunicação excelente e resultados rápidos!"</p>
+                    <h3>Maria Oliveira</h3>
+                </div>
+            </div>
+        </section>
+
+        <!-- Chamada à Ação -->
+        <section class="cta">
+            <h2>Pronto para criar algo incrível?</h2>
+            <p>Entre em contato agora e vamos trabalhar juntos!</p>
+            <a href="#contato">Fale Conosco</a>
+        </section>
+    </main>
+
+    <!-- Formulário de Contato -->
+    <section id="contato">
+        <h2 style="text-align: center;">Contato</h2>
+        <div class="form-container">
+            <form action="mailto:exemplo@dominio.com" method="post" enctype="text/plain">
+                <input type="text" name="nome" placeholder="Seu nome" required>
+                <input type="email" name="email" placeholder="Seu e-mail" required>
+                <textarea name="mensagem" rows="5" placeholder="Sua mensagem" required>
